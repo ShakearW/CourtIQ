@@ -1,0 +1,8 @@
+angular:
+    build: ./frontend
+    ports:
+      - "4200:4200"
+    depends_on:
+      - api
+    networks:
+      - custom_net
