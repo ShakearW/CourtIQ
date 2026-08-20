@@ -1,0 +1,20 @@
+@if (player) {
+  <h2>{{ player.first_name }} {{ player.last_name }}</h2>
+  <p>Position: {{ player.position }}</p>
+
+  <table>
+    <tr>
+      <th>Season</th><th>GP</th><th>PTS</th><th>REB</th><th>AST</th><th>TS%</th>
+    </tr>
+    @for (season of player.seasons; track season.season) {
+      <tr>
+        <td>{{ season.season }}</td>
+        <td>{{ season.games_played }}</td>
+        <td>{{ season.pts_avg }}</td>
+        <td>{{ season.reb_avg }}</td>
+        <td>{{ season.ast_avg }}</td>
+        <td>{{ season.ts_pct }}</td>
+      </tr>
+    }
+  </table>
+}

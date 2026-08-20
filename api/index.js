@@ -39,12 +39,12 @@ app.get('/api/leaders', async (req, res) => {
   }
 
   const query = season
-    ? `SELECT p.first_name, p.last_name, s.${stat}, s.season
+    ? `SELECT p.id, p.first_name, p.last_name, s.${stat}, s.season
        FROM player_season_stats s
        JOIN players p ON p.id = s.player_id
        WHERE s.season = $1
        ORDER BY s.${stat} DESC LIMIT 10`
-    : `SELECT p.first_name, p.last_name, s.${stat}, s.season
+    : `SELECT p.id, p.first_name, p.last_name, s.${stat}, s.season
        FROM player_season_stats s
        JOIN players p ON p.id = s.player_id
        ORDER BY s.${stat} DESC LIMIT 10`;
@@ -59,9 +59,24 @@ app.get('/api/leaders', async (req, res) => {
 app.get('/api/teams/:id', async (req, res) => {
   const { id } = req.params;
   const team = await pool.query('SELECT * FROM teams WHERE id = $1', [id]);
-  const roster = await pool.query('SELECT * FROM players WHERE team_id = $1', [id]);
   if (team.rows.length === 0) return res.status(404).json({ error: 'Team not found' });
-  res.json({ ...team.rows[0], roster: roster.rows });
+  res.json(team.rows[0]);
+});
+
+app.get('/api/teams/:id/roster', async (req, res) => {
+  const { id } = req.params;
+  const { season } = req.query;
+  const result = await pool.query(`
+    SELECT DISTINCT p.id, p.first_name, p.last_name, p.position,
+      s.pts_avg, s.reb_avg, s.ast_avg, s.ts_pct
+    FROM box_scores b
+    JOIN games g ON g.id = b.game_id
+    JOIN players p ON p.id = b.player_id
+    LEFT JOIN player_season_stats s ON s.player_id = p.id AND s.season = g.season
+    WHERE b.team_id = $1 AND g.season = $2
+    ORDER BY s.pts_avg DESC NULLS LAST
+  `, [id, season]);
+  res.json(result.rows);
 });
 
 app.listen(3000, () => console.log('API running on port 3000'));

@@ -1,3 +1,36 @@
 /* You can add global styles to this file, and also import other style files */
 
 @import 'tailwindcss';
+body.dark-mode {
+  background-color: #121212;
+  color: #ffffff;
+}
+
+body.dark-mode .navbar {
+  background-color: #121212;
+  border-color: #333;
+}
+
+body.dark-mode .sidebar {
+  background-color: #121212;
+  border-color: #333;
+}
+
+body.dark-mode .sidebar a {
+  color: #ffffff;
+}
+
+body.dark-mode .dark-mode {
+  color: #ffffff;
+}
+
+body.dark-mode .home-content {
+  background-color: #121212;
+  color: #ffffff;
+}
+
+body.dark-mode .search-container input {
+  background-color: #222;
+  color: #ffffff;
+  border-color: #444;
+}

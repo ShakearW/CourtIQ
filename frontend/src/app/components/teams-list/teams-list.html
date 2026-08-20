@@ -1,0 +1,10 @@
+<table>
+  <tr><th>Team</th><th>Conference</th><th>Division</th></tr>
+  @for (t of teams; track t.id) {
+    <tr>
+      <td><a [routerLink]="['/teams', t.id]">{{ t.name }}</a></td>
+      <td>{{ t.conference }}</td>
+      <td>{{ t.division }}</td>
+    </tr>
+  }
+</table>

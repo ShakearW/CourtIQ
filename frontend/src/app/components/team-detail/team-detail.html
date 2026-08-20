@@ -1,0 +1,23 @@
+@if (team) {
+  <h2>{{ team.name }} ({{ team.abbreviation }})</h2>
+  <p>{{ team.conference }} Conference — {{ team.division }} Division</p>
+
+  <select (change)="onSeasonChange(+$any($event.target).value)">
+    @for (s of seasons; track s) {
+      <option [value]="s" [selected]="s === selectedSeason">{{ s }}</option>
+    }
+  </select>
+
+  <table>
+    <tr><th>Player</th><th>PTS</th><th>REB</th><th>AST</th><th>TS%</th></tr>
+    @for (p of roster; track p.id) {
+      <tr>
+        <td><a [routerLink]="['/players', p.id]">{{ p.first_name }} {{ p.last_name }}</a></td>
+        <td>{{ p.pts_avg }}</td>
+        <td>{{ p.reb_avg }}</td>
+        <td>{{ p.ast_avg }}</td>
+        <td>{{ p.ts_pct }}</td>
+      </tr>
+    }
+  </table>
+}

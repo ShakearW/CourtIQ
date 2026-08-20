@@ -1,0 +1,16 @@
+.app-container {
+  min-height: 100vh;
+}
+
+.main-layout {
+  display: flex;
+  padding: 0 350px;
+  box-sizing: border-box;
+}
+
+.home-content {
+  flex: 1;
+  min-height: calc(100vh - 64px);
+  padding: 32px;
+  box-sizing: border-box;
+}

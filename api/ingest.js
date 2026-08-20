@@ -106,16 +106,16 @@ async function ingestBoxScores(season) {
 
     for (const s of json.data) {
       await pool.query(
-        `INSERT INTO box_scores (game_id, player_id, mins, pts, reb, ast, stl, blk, fgm, fga, fg3m, fg3a, ftm, fta, turnover, pf)
-         VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16)
-         ON CONFLICT (game_id, player_id) DO UPDATE SET pts=$4, reb=$5, ast=$6`,
-        [s.game.id, s.player.id, s.min, s.pts, s.reb, s.ast, s.stl, s.blk, s.fgm, s.fga, s.fg3m, s.fg3a, s.ftm, s.fta, s.turnover, s.pf]
+        `INSERT INTO box_scores (game_id, player_id, team_id, mins, pts, reb, ast, stl, blk, fgm, fga, fg3m, fg3a, ftm, fta, turnover, pf)
+         VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17)
+         ON CONFLICT (game_id, player_id) DO UPDATE SET team_id=$3, pts=$5, reb=$6, ast=$7`,
+        [s.game.id, s.player.id, s.team.id, s.min, s.pts, s.reb, s.ast, s.stl, s.blk, s.fgm, s.fga, s.fg3m, s.fg3a, s.ftm, s.fta, s.turnover, s.pf]
       );
     }
     total += json.data.length;
     cursor = json.meta?.next_cursor;
 
-    if (cursor) await new Promise(r => setTimeout(r, 13000));
+    if (cursor) await new Promise(r => setTimeout(r, 1200)); // ~50 req/min, safe under ALL-STAR's 60 limit
   } while (cursor);
   console.log(`Box scores ingested: ${total}`);
 }

@@ -1,0 +1,15 @@
+<select (change)="onSeasonChange(+$any($event.target).value)">
+  @for (s of seasons; track s) {
+    <option [value]="s" [selected]="s === selectedSeason">{{ s }}</option>
+  }
+</select>
+
+<table>
+ <tr><th>Player</th><th>{{ stats.find(s => s.value === selectedStat)?.label }}</th></tr>
+@for (player of leaders; track player.id) {
+  <tr>
+    <td><a [routerLink]="['/players', player.id]">{{ player.first_name }} {{ player.last_name }}</a></td>
+    <td>{{ player[selectedStat] }}</td>
+  </tr>
+}
+</table>
