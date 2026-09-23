@@ -16,6 +16,8 @@ async function computeSeasonStats() {
       SUM(b.pts)::numeric / NULLIF(2 * (SUM(b.fga) + 0.44 * SUM(b.fta)), 0) AS ts_pct
     FROM box_scores b
     JOIN games g ON g.id = b.game_id
+    WHERE g.status = 'Final' AND g.postseason = false
+    AND b.mins IS NOT NULL AND b.mins NOT IN ('', '0', '00', '0:00')
     GROUP BY b.player_id, g.season
     ON CONFLICT (player_id, season) DO UPDATE SET
       games_played = EXCLUDED.games_played,

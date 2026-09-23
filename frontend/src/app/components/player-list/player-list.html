@@ -1,0 +1,32 @@
+
+<div class="search-bar">
+  <input type="text" placeholder="Search players..." [(ngModel)]="searchTerm" (ngModelChange)="onSearchChange()" />
+</div>
+<main class="data-card players-card">
+  <h2>Players</h2>
+  <div class="roster-grid roster-header-row">
+    <span>#</span><span>Team</span><span>Player</span><span>Pos</span><span>Ht</span><span>Wt</span><span>PTS</span><span>REB</span><span>AST</span>
+  </div>
+  @for (p of pagedPlayers; track p.id) {
+    <div class="roster-grid roster-row">
+      <span>{{ p.jersey_number }}</span>
+      <a [routerLink]="['/teams', p.team_id]" class="team-link">
+        <img [src]="'https://a.espncdn.com/i/teamlogos/nba/500/' + getLogoAbbr(p.abbreviation) + '.png'" width="20" height="20" />
+        {{ p.abbreviation }}
+      </a>
+      <a [routerLink]="['/players', p.id]">{{ p.first_name }} {{ p.last_name }}</a>
+      <span>{{ p.position }}</span>
+      <span>{{ p.height }}</span>
+      <span>{{ p.weight }}</span>
+      <span>{{ p.pts_avg }}</span>
+      <span>{{ p.reb_avg }}</span>
+      <span>{{ p.ast_avg }}</span>
+    </div>
+  }
+
+  <div class="pagination">
+    <button (click)="goToPage(currentPage - 1)" [disabled]="currentPage === 1">Prev</button>
+    <span>Page {{ currentPage }} of {{ totalPages }}</span>
+    <button (click)="goToPage(currentPage + 1)" [disabled]="currentPage === totalPages">Next</button>
+  </div>
+</main>

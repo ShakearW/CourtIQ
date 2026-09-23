@@ -1,15 +1,80 @@
-<select (change)="onSeasonChange(+$any($event.target).value)">
-  @for (s of seasons; track s) {
-    <option [value]="s" [selected]="s === selectedSeason">{{ s }}</option>
-  }
-</select>
+<main class="leaders-content">
 
-<table>
- <tr><th>Player</th><th>{{ stats.find(s => s.value === selectedStat)?.label }}</th></tr>
-@for (player of leaders; track player.id) {
-  <tr>
-    <td><a [routerLink]="['/players', player.id]">{{ player.first_name }} {{ player.last_name }}</a></td>
-    <td>{{ player[selectedStat] }}</td>
-  </tr>
-}
-</table>
+  <div class="leader-sections">
+
+    <section class="leader-section">
+
+      <h1>NBA Leaders</h1>
+
+      <div class="data-card leader-card">
+
+        <div class="leaderboard-control">
+          <select (change)="onSeasonChange(+$any($event.target).value)">
+            @for (s of seasons; track s) {
+              <option
+                [value]="s.value"
+                [selected]="s.value === selectedSeason">
+                {{ s.label }}
+              </option>
+            }
+          </select>
+
+          <select (change)="onStatChange($any($event.target).value)">
+            @for (s of stats; track s) {
+              <option
+                [value]="s.value"
+                [selected]="s.value === selectedStat">
+                {{ s.label }}
+              </option>
+            }
+          </select>
+        </div>
+
+        <div class="leader-grid leader-header-row">
+          <span>#</span>
+          <span>Player</span>
+          <span>Pos</span>
+          <span>GP</span>
+          <span>{{ statLabel }}</span>
+        </div>
+
+        @for (p of leaders; track p.id; let i = $index) {
+          <div class="leader-grid leader-row">
+            <span>{{ i + 1 }}</span>
+
+            <a [routerLink]="['/players', p.id]" class="player-link">
+              <img
+                [src]="'https://a.espncdn.com/i/teamlogos/nba/500/' + getLogoAbbr(p.abbreviation) + '.png'"
+                width="20"
+                height="20"
+              />
+
+              {{ p.first_name }} {{ p.last_name }}
+            </a>
+
+            <span>{{ p.position }}</span>
+            <span>{{ p.games_played }}</span>
+            <span>{{ p[selectedStat] }}</span>
+          </div>
+        }
+
+      </div>
+
+    </section>
+
+
+    <section class="leader-section">
+
+      <h1>League Rankings</h1>
+
+      <div class="data-card leader-card">
+
+        <!-- Rankings data -->
+
+      </div>
+
+    </section>
+
+  </div>
+
+</main>

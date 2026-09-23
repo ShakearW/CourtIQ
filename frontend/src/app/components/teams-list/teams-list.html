@@ -1,10 +1,15 @@
-<table>
-  <tr><th>Team</th><th>Conference</th><th>Division</th></tr>
-  @for (t of teams; track t.id) {
-    <tr>
-      <td><a [routerLink]="['/teams', t.id]">{{ t.name }}</a></td>
-      <td>{{ t.conference }}</td>
-      <td>{{ t.division }}</td>
-    </tr>
-  }
-</table>
+<main class="teams-content">
+    <div class="data-card ">
+      <div class="teams-flex">
+        @for (t of teams; track t.id) {
+          <a [routerLink]="['/teams', t.id]"
+            class="team-tile"
+            [style.background-color]="getTeamColor(t.abbreviation)">
+            <img [src]="'https://a.espncdn.com/i/teamlogos/nba/500/' + getLogoAbbr(t.abbreviation) + '.png'" width="60" height="60" />
+            <span class="team-tile-name">{{ t.name }}</span>
+            <span class="team-tile-conf">{{ t.conference }} Conference</span>
+          </a>
+        }
+      </div>
+    </div>
+</main>

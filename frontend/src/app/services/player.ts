@@ -26,4 +26,25 @@ export class PlayerService {
   getTeamRoster(id: number, season: number) {
   return this.http.get(`${this.baseUrl}/teams/${id}/roster?season=${season}`);
   }
+
+  getTopPlayer(stat: string, season: number) {
+  return this.http.get(`${this.baseUrl}/leaders?stat=${stat}&season=${season}`);
+  }
+
+  getRecentGames() {
+  return this.http.get(`${this.baseUrl}/games/recent`);
+  }
+
+  getStandings(season: number) {
+  return this.http.get(`${this.baseUrl}/standings?season=${season}`);
+  }
+
+  getTeamRatings(season: number) {
+  return this.http.get(`${this.baseUrl}/team-ratings?season=${season}`);
+  }
+
+  getAllPlayers(season: number) {
+  return this.http.get(`${this.baseUrl}/players?season=${season}`);
+  }
+
 }

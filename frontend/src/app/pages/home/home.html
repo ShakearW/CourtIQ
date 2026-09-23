@@ -1,9 +1,119 @@
-<app-header></app-header>
+<main class="home-content">
+  <h1>NBA Statistics</h1>
 
-<div class="main-layout">
-  <app-sidebar></app-sidebar>
+  <div class="leaders-row">
+    @if (pointsLeader) {
+      <div class="data-card">
+        <h2>Points Leader</h2>
+        <p class="player-name">{{ pointsLeader.first_name }} {{ pointsLeader.last_name }}</p>
+        <p class="stat-value">{{ pointsLeader.pts_avg }} PPG</p>
+      </div>
+    }
+    @if (reboundsLeader) {
+      <div class="data-card">
+        <h2>Rebounds Leader</h2>
+        <p class="player-name">{{ reboundsLeader.first_name }} {{ reboundsLeader.last_name }}</p>
+        <p class="stat-value">{{ reboundsLeader.reb_avg }} RPG</p>
+      </div>
+    }
+  </div>
 
-  <main class="home-content">
-    <h1>Home</h1>
-  </main>
-</div>
+  
+  <div class="stats-row">
+    <div class="data-card large">
+    <div class="recent-games">
+      <h2>Recent Games</h2>
+      <div class="games-list">
+        @for (g of recentGames; track g.id) {
+          <div class="game-card">
+            <div class="team-row">
+              <div class="team-info">
+                <img [src]="getTeamLogo(g.home_team)" [alt]="g.home_team" class="team-logo" />
+                <span>{{ g.home_team }}</span>
+              </div>
+              <strong>{{ g.home_team_score }}</strong>
+            </div>
+            <div class="team-row">
+              <div class="team-info">
+                <img [src]="getTeamLogo(g.away_team)" [alt]="g.away_team" class="team-logo" />
+                <span>{{ g.away_team }}</span>
+              </div>
+              <strong>{{ g.away_team_score }}</strong>
+            </div>
+            <div class="game-stats"><span>Final</span></div>
+          </div>
+        }
+      </div>
+    </div>
+    </div>
+
+    <div class="data-card large">
+      <div class="league-rankings">
+        <h2>League Rankings</h2>
+        <div class="stacked-cards">
+          <div class="data-card small">
+            <h2>Best Offense</h2>
+            @for (t of topOffense; track t.id) {
+              <div class="mini-rank-row">
+                <span>{{ t.off_rating }}</span>
+                <span class="team-info">
+                  <img [src]="'https://a.espncdn.com/i/teamlogos/nba/500/' + getLogoAbbr(t.abbreviation) + '.png'" width="25" height="25" />
+                  {{ t.name }}
+                </span>
+              </div>
+            }
+          </div>
+          <div class="data-card small">
+            <h2>Best Defense</h2>
+            @for (t of topDefense; track t.id) {
+              <div class="mini-rank-row">
+                <span>{{ t.def_rating }}</span>
+                <span class="team-info">
+                  <img [src]="'https://a.espncdn.com/i/teamlogos/nba/500/' + getLogoAbbr(t.abbreviation) + '.png'" width="25" height="25" />
+                  {{ t.name }}
+                </span>
+              </div>
+            }
+          </div>
+          <div class="data-card small">
+            <h2>Best 3P%</h2>
+            @for (t of top3pt; track t.id) {
+              <div class="mini-rank-row">
+                <span>{{ (t.three_pct * 100).toFixed(1) }}% </span>
+                <span class="team-name">
+                  <img [src]="'https://a.espncdn.com/i/teamlogos/nba/500/' + getLogoAbbr(t.abbreviation) + '.png'" width="25" height="25" />
+                  {{ t.name }}
+                </span>
+              </div>
+            }
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="data-card standings">
+      <div class="standings-header-row">
+        <h2>Standings</h2>
+        <div class="standings-toggle">
+          <button (click)="setFilter('East')" [class.active]="viewFilter === 'East'">East</button>
+          <button (click)="setFilter('West')" [class.active]="viewFilter === 'West'">West</button>
+          <button (click)="setFilter('all')" [class.active]="viewFilter === 'all'">All</button>
+        </div>
+      </div>
+      <div class="standings-header">
+        <span>Team</span><span>W</span><span>L</span><span>PCT</span>
+      </div>
+      @for (t of filteredStandings; track t.id) {
+        <div class="standings-row">
+          <span class="team-name">
+            <img [src]="'https://a.espncdn.com/i/teamlogos/nba/500/' + getLogoAbbr(t.abbreviation) + '.png'" width="20" height="20" />
+            {{ t.name }}
+          </span>
+          <span>{{ t.wins }}</span>
+          <span>{{ t.losses }}</span>
+          <span>{{ t.pct }}</span>
+        </div>
+      }
+    </div>
+  </div>
+</main>

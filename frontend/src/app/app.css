@@ -1,17 +1,17 @@
-nav {
+:host {
+  display: block;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.main-layout {
   display: flex;
-  gap: 1.5rem;
-  padding: 1rem 2rem;
-  background: #111;
+  height: calc(100vh - 64px);
+  padding-left: 350px;
 }
 
-nav a {
-  color: #ccc;
-  text-decoration: none;
-  font-weight: 500;
-}
-
-nav a.active {
-  color: #fff;
-  border-bottom: 2px solid #f97316;
+.page-content {
+  flex: 1;
+  overflow-y: auto;
+  height: 100%;
 }

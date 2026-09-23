@@ -45,17 +45,21 @@ async function ingestPlayers() {
     const json = await res.json();
 
     for (const p of json.data) {
+      const teamId = p.team?.id;
+      const validTeam = teamId ? await pool.query('SELECT 1 FROM teams WHERE id = $1', [teamId]) : null;
+      const safeTeamId = validTeam && validTeam.rows.length > 0 ? teamId : null;
+
       await pool.query(
-        `INSERT INTO players (id, first_name, last_name, position, height, weight, team_id)
-         VALUES ($1,$2,$3,$4,$5,$6,$7)
-         ON CONFLICT (id) DO UPDATE SET team_id=$7, updated_at=NOW()`,
-        [p.id, p.first_name, p.last_name, p.position, p.height, p.weight, p.team?.id]
+        `INSERT INTO players (id, first_name, last_name, position, height, weight, jersey_number, team_id)
+         VALUES ($1,$2,$3,$4,$5,$6,$7,$8)
+         ON CONFLICT (id) DO UPDATE SET team_id=$8, jersey_number=$7, weight=$6, updated_at=NOW()`,
+        [p.id, p.first_name, p.last_name, p.position, p.height, p.weight, p.jersey_number, safeTeamId]
       );
     }
     total += json.data.length;
     cursor = json.meta?.next_cursor;
 
-    if (cursor) await new Promise(r => setTimeout(r, 13000)); // ~4.6 req/min, safe margin
+    if (cursor) await new Promise(r => setTimeout(r, 1200));
   } while (cursor);
   console.log(`Players ingested: ${total}`);
 }
@@ -78,10 +82,10 @@ async function ingestGames(season) {
             continue;
         }
         await pool.query(
-            `INSERT INTO games (id, date, season, home_team_id, away_team_id, home_team_score, away_team_score, status)
-            VALUES ($1,$2,$3,$4,$5,$6,$7,$8)
-            ON CONFLICT (id) DO UPDATE SET home_team_score=$6, away_team_score=$7, status=$8`,
-            [g.id, g.date, g.season, g.home_team.id, g.visitor_team.id, g.home_team_score, g.visitor_team_score, g.status]
+            `INSERT INTO games (id, date, season, home_team_id, away_team_id, home_team_score, away_team_score, status, postseason)
+            VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9)
+            ON CONFLICT (id) DO UPDATE SET home_team_score=$6, away_team_score=$7, status=$8, postseason=$9`,
+            [g.id, g.date, g.season, g.home_team.id, g.visitor_team.id, g.home_team_score, g.visitor_team_score, g.status, g.postseason]
         );
     }
     total += json.data.length;

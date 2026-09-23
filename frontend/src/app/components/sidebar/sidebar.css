@@ -8,7 +8,7 @@
   flex-direction: column;
   justify-content: space-between;
 }
-
+/* Sidebar styles */
 .sidebar nav {
   display: flex;
   flex-direction: column;
@@ -21,7 +21,6 @@
   gap: 12px;
   padding: 12px;
   text-decoration: none;
-  color: #333;
   border-radius: 8px;
 }
 
@@ -38,7 +37,7 @@
   align-items: center;
   gap: 12px;
   padding: 12px;
-  color: #333;
+  color: #ccc;
 }
 
 .switch {
@@ -81,4 +80,9 @@
 
 .switch input:checked + .slider::before {
   transform: translateX(18px);
+}
+/* Dark mode */
+:host-context(body.dark-mode) .sidebar a:hover {
+  background-color: #9b9b9b;
+  
 }

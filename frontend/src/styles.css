@@ -34,3 +34,9 @@ body.dark-mode .search-container input {
   color: #ffffff;
   border-color: #444;
 }
+
+html, body {
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+}

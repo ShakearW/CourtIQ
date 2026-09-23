@@ -1,23 +1,63 @@
-@if (team) {
-  <h2>{{ team.name }} ({{ team.abbreviation }})</h2>
-  <p>{{ team.conference }} Conference — {{ team.division }} Division</p>
+<main class="home-content">
+  @if (team) {
+    <div class="data-card team-header" [style.background-color]="getTeamColor(team.abbreviation)" [style.--team-secondary]="getTeamSecondaryColor(team.abbreviation)">
+      <div class="team-header-top">
+        <img [src]="'https://a.espncdn.com/i/teamlogos/nba/500/' + getLogoAbbr(team.abbreviation) + '.png'" width="60" height="60" />
+        <div>
+          <h2>{{ team.name }}</h2>
+          <p>{{ team.conference }} Conference — {{ team.division }} Division</p>
+        </div>
 
-  <select (change)="onSeasonChange(+$any($event.target).value)">
-    @for (s of seasons; track s) {
-      <option [value]="s" [selected]="s === selectedSeason">{{ s }}</option>
-    }
-  </select>
+        <select (change)="onSeasonChange(+$any($event.target).value)" class="season-select">
+     @for (s of seasons; track s.value) {
+      <option [value]="s.value" [selected]="s.value === selectedSeason">{{ s.label }}</option>
+     }
+      </select>
+      </div>
 
-  <table>
-    <tr><th>Player</th><th>PTS</th><th>REB</th><th>AST</th><th>TS%</th></tr>
-    @for (p of roster; track p.id) {
-      <tr>
-        <td><a [routerLink]="['/players', p.id]">{{ p.first_name }} {{ p.last_name }}</a></td>
-        <td>{{ p.pts_avg }}</td>
-        <td>{{ p.reb_avg }}</td>
-        <td>{{ p.ast_avg }}</td>
-        <td>{{ p.ts_pct }}</td>
-      </tr>
-    }
-  </table>
+      <nav class="team-tabs">
+        <button (click)="setTab('overview')" [class.active]="activeTab === 'overview'">Overview</button>
+        <button (click)="setTab('stats')" [class.active]="activeTab === 'stats'">Stats</button>
+        <button (click)="setTab('schedule')" [class.active]="activeTab === 'schedule'">Schedule</button>
+        <button (click)="setTab('roster')" [class.active]="activeTab === 'roster'">Roster</button>
+        <button (click)="setTab('history')" [class.active]="activeTab === 'history'">History</button>
+      </nav>
+    </div>
+
+    @if (activeTab === 'roster') {
+      @if (activeTab === 'roster') {
+        <div class="data-card roster-card">
+          <div class="roster-grid roster-header-row">
+  <span>Player</span><span>Pos</span><span>Ht</span><span>Wt</span><span>GP</span><span>PTS</span><span>REB</span><span>AST</span><span>TS%</span>
+</div>
+@for (p of roster; track p.id) {
+  <div class="roster-grid roster-row">
+    <a [routerLink]="['/players', p.id]">{{ p.first_name }} {{ p.last_name }}</a>
+    <span>{{ p.position }}</span>
+    <span>{{ p.height }}</span>
+    <span>{{ p.weight }}</span>
+    <span>{{ p.games_played }}</span>
+    <span>{{ p.pts_avg }}</span>
+    <span>{{ p.reb_avg }}</span>
+    <span>{{ p.ast_avg }}</span>
+    <span>{{ p.ts_pct }}</span>
+  </div>
 }
+        </div>
+      }
+    }
+
+    @if (activeTab === 'overview') {
+      <p>Overview coming soon.</p>
+    }
+    @if (activeTab === 'stats') {
+      <p>Team stats coming soon.</p>
+    }
+    @if (activeTab === 'schedule') {
+      <p>Schedule coming soon.</p>
+    }
+    @if (activeTab === 'history') {
+      <p>History coming soon.</p>
+    }
+  }
+</main>
